@@ -21,7 +21,8 @@ app.use('/projects', require('./controllers/project.controller'));
 app.use(errorHandler);
 
 // start server
-const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 12693;
+//const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 12693;
+const port = process.env.PORT || 12693
 const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
 });
