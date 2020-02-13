@@ -1,7 +1,7 @@
 
 {
     "connectionString": "mongodb://localhost/FreeCollegeProjects",
-    "uri":"//jitendra:sonujitu@12693@cluster0-3pagz.mongodb.net/test?retryWrites=true&w=majority",
+    "uri":"//jitendra:sonujitu%4012693@cluster0-3pagz.mongodb.net/test?retryWrites=true&w=majority",
     "secret": "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING"
 }
 
