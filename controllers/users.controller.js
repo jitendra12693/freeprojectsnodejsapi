@@ -13,17 +13,25 @@ router.delete('/:id', _delete);
 
 module.exports = router;
 
-function authenticate(req, res, next) {
-    userService.authenticate(req.body)
-        .then(user => user ? res.json(user) : res.status(400).json(
-            { message: 'Username or password is incorrect. Please enter valid user credential'}))
-        .catch(err => next(err));
+async function authenticate(req, res, next) {
+    try{
+        let userResponse = await userService.authenticate(req.body);
+        console.log(userResponse);
+        res.json({success:true,data:userResponse});
+    }
+    catch (ex) {
+        next(ex);
+    }
 }
 
-function register(req, res, next) {
-    userService.create(req.body)
-        .then(() => res.json({}))
-        .catch(err => next(err));
+async function register(req, res, next) {
+    try{
+        let userResponse = await userService.create(req.body);
+        res.json({success : true, data : userResponse});
+    }
+    catch(ex){
+        next(ex)
+    }
 }
 
 function update(req, res, next) {

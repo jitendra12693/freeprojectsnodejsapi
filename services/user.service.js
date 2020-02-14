@@ -2,7 +2,9 @@ const config = require('config.json');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
-const User = db.User;
+//const User = db.User;
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
 
 module.exports = {
     authenticate,
@@ -35,19 +37,28 @@ async function getById(id) {
 
 async function create(userParam) {
     // validate
-    if (await User.findOne({ Email: userParam.Email })) {
-        throw 'Email "' + userParam.Email + '" is already taken';
+    let response = {};
+    try {
+        let userdata = await User.findOne({ Email: userParam.Email }).lean(true);
+        if (userdata) {
+            response = `Email, ${userParam.Email} is already taken`;
+        }
+        else{
+            // save user
+            const user = new User(userParam);
+            if (userParam.Password) {
+                user.hash = bcrypt.hashSync(userParam.Password, 10);
+            }
+            userdata = await user.save().lean(true);
+            delete response._id;
+            delete response.__v;
+            response = userdata;
+        }
+        return response;
     }
-
-    const user = new User(userParam);
-
-    // hash password
-    if (userParam.Password) {
-        user.hash = bcrypt.hashSync(userParam.Password, 10);
-    }
-
-    // save user
-    await user.save();
+   catch (ex) {
+        console.log("-----------------------------", ex  );
+   }
 }
 
 async function update(id, userParam) {
